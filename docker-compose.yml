@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  web:
+    image: your-image:latest
+    ports:
+      - "80:80"
+    volumes:
+      - webdata:/var/www/html
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  webdata:
+    driver: local
