@@ -1,23 +1,28 @@
 version: '3.8'
 
 services:
-  web:
-    image: your-image:latest
-    ports:
-      - "80:80"
+  sputnik:
+    build: .
+    container_name: sputnik-sfx
+    restart: always
+    network_mode: host
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+      memlock:
+        soft: -1
+        hard: -1
     volumes:
-      - webdata:/var/www/html
-    deploy:
-      resources:
-        limits:
-          cpus: '0.5'
-          memory: 512M
-    logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "3"
+      - sputnik_data:/data
+      - sputnik_logs:/var/log
+    sysctls:
+      - net.core.rmem_max=67108864
+      - net.core.wmem_max=67108864
+      - net.core.rmem_default=16777216
+      - net.core.wmem_default=16777216
+      - net.core.netdev_max_backlog=100000
 
 volumes:
-  webdata:
-    driver: local
+  sputnik_data:
+  sputnik_logs:
